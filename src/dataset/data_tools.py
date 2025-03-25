@@ -1,7 +1,9 @@
-from datasets import load_dataset
+import requests
+from huggingface_hub.file_download import build_hf_headers
+from mlcroissant import Dataset
 
-# Load the dataset
-dataset = load_dataset("liuxuannan/MMFakeBench", "MMFakeBench_test")
-
-# Print the first example in the dataset
-print(dataset['train'][0])
+# Login using e.g. `huggingface-cli login` to access this dataset
+headers = build_hf_headers()  # handles authentication
+jsonld = requests.get("https://huggingface.co/api/datasets/liuxuannan/MMFakeBench/croissant", headers=headers).json()
+ds = Dataset(jsonld=jsonld)
+records = ds.records("MMFakeBench_test")
